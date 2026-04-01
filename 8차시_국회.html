@@ -3,574 +3,644 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>8차시 — 법을 만드는 국회</title>
+<title>입법 시뮬레이션 — 법을 만드는 국회</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap');
+:root {
+  --bg: #0d1b2a; --panel: #1e2d45; --border: #2e4a6e;
+  --gold: #f5c842; --navy: #1a2744;
+  --red: #e74c3c; --green: #2ecc71; --blue: #3498db;
+  --text: #e8f0fe; --muted: #8badd3;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
 
-  :root {
-    --navy: #1a2744;
-    --gold: #f5c842;
-    --red: #c0392b;
-    --green: #27ae60;
-    --bg: #0d1b2a;
-    --panel: #1e2d45;
-    --border: #2e4a6e;
-    --text: #e8f0fe;
-    --muted: #8badd3;
-  }
+/* ── 화면 전환 ── */
+.screen { display: none; min-height: 100vh; padding: 24px 20px; max-width: 680px; margin: 0 auto; }
+.screen.active { display: flex; flex-direction: column; gap: 16px; }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+/* ── 버튼 ── */
+.btn { border: none; border-radius: 10px; padding: 14px 20px; font-family: inherit; font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: all 0.15s; width: 100%; letter-spacing: 0.5px; }
+.btn:hover { transform: translateY(-2px); opacity: 0.92; }
+.btn:active { transform: translateY(0); }
+.btn-gold { background: var(--gold); color: var(--navy); }
+.btn-outline { background: transparent; border: 2px solid var(--border); color: var(--text); }
+.btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+.btn-red { background: var(--red); color: white; }
+.btn-green { background: var(--green); color: var(--navy); }
+.btn-blue { background: var(--blue); color: white; }
+.btn-gray { background: #2e4a6e; color: var(--muted); }
 
-  body {
-    font-family: 'Noto Sans KR', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    padding: 20px;
-  }
+/* ── 패널 ── */
+.panel { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+.panel.gold-border { border-color: var(--gold); }
+.panel.red-border { border-color: var(--red); }
+.panel.green-border { border-color: var(--green); }
 
-  /* ── 상단 헤더 ── */
-  .header {
-    background: linear-gradient(135deg, #1a2744, #0d2137);
-    border: 2px solid var(--gold);
-    border-radius: 12px;
-    padding: 20px 28px;
-    margin-bottom: 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .header-left h1 {
-    font-size: 1.5rem;
-    font-weight: 900;
-    color: var(--gold);
-    letter-spacing: 1px;
-  }
-  .header-left p { color: var(--muted); font-size: 0.85rem; margin-top: 4px; }
-  .progress-ring {
-    position: relative;
-    width: 72px; height: 72px;
-  }
-  .progress-ring svg { transform: rotate(-90deg); }
-  .progress-ring circle { transition: stroke-dashoffset 0.5s ease; }
-  .progress-text {
-    position: absolute; inset: 0;
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    font-size: 1.1rem; font-weight: 900; color: var(--gold);
-    line-height: 1;
-  }
-  .progress-text span { font-size: 0.6rem; color: var(--muted); }
+/* ── 배지 ── */
+.badge { display: inline-block; font-size: 0.7rem; font-weight: 900; padding: 3px 10px; border-radius: 4px; letter-spacing: 1px; }
+.badge-gold { background: var(--gold); color: var(--navy); }
+.badge-red { background: var(--red); color: white; }
+.badge-green { background: var(--green); color: var(--navy); }
+.badge-blue { background: var(--blue); color: white; }
+.badge-gray { background: #2e4a6e; color: var(--muted); }
 
-  /* ── 학생 정보 ── */
-  .student-bar {
-    display: flex; gap: 12px; margin-bottom: 20px;
-  }
-  .student-bar .field {
-    flex: 1;
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 10px 14px;
-    display: flex; align-items: center; gap: 8px;
-  }
-  .student-bar .field label { color: var(--muted); font-size: 0.8rem; white-space: nowrap; }
-  .student-bar .field input {
-    background: transparent; border: none; outline: none;
-    color: var(--gold); font-size: 1rem; font-weight: 700;
-    font-family: inherit; width: 100%;
-  }
-  .student-bar .field input::placeholder { color: #3a5070; }
+/* ── 스텝 진행바 ── */
+.stepbar { display: flex; align-items: center; gap: 4px; }
+.step-dot { width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 700; color: var(--muted); transition: all 0.3s; flex-shrink: 0; }
+.step-dot.done { background: var(--green); border-color: var(--green); color: var(--navy); }
+.step-dot.current { background: var(--gold); border-color: var(--gold); color: var(--navy); animation: pulse 1.5s infinite; }
+.step-line { flex: 1; height: 2px; background: var(--border); }
+.step-line.done { background: var(--green); }
+@keyframes pulse { 0%,100%{box-shadow:0 0 0 0 rgba(245,200,66,0.4)} 50%{box-shadow:0 0 0 6px rgba(245,200,66,0)} }
 
-  /* ── RPG 스탯창 ── */
-  .stat-box {
-    background: var(--panel);
-    border: 2px solid var(--border);
-    border-radius: 10px;
-    padding: 18px 20px;
-    margin-bottom: 20px;
-  }
-  .stat-box-title {
-    font-size: 0.75rem; font-weight: 700;
-    color: var(--gold); letter-spacing: 2px;
-    text-transform: uppercase; margin-bottom: 14px;
-    display: flex; align-items: center; gap: 8px;
-  }
-  .stat-box-title::after {
-    content: ''; flex: 1; height: 1px; background: var(--border);
-  }
-  .stat-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
-  }
-  .stat-item {
-    background: #0d1b2a;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 10px 12px;
-    text-align: center;
-  }
-  .stat-item .stat-label { font-size: 0.7rem; color: var(--muted); margin-bottom: 4px; }
-  .stat-item .stat-value { font-size: 1.1rem; font-weight: 900; color: var(--gold); }
-  .stat-item.unknown .stat-value {
-    color: #3a5070; letter-spacing: 2px;
-  }
+/* ── 대화창 ── */
+.dialog { position: relative; background: #0d1b2a; border: 2px solid var(--border); border-radius: 10px; padding: 18px 18px 14px; }
+.dialog-speaker { position: absolute; top: -12px; left: 14px; background: var(--navy); border: 1px solid var(--gold); color: var(--gold); font-size: 0.72rem; font-weight: 700; padding: 2px 10px; border-radius: 4px; }
+.dialog p { font-size: 0.92rem; line-height: 1.75; }
+.dialog .highlight { color: var(--gold); font-weight: 700; }
 
-  /* ── 섹션 카드 ── */
-  .section {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    margin-bottom: 16px;
-    overflow: hidden;
-  }
-  .section-header {
-    background: linear-gradient(90deg, #1a3a5c, #1e2d45);
-    padding: 12px 18px;
-    display: flex; align-items: center; gap: 10px;
-    border-bottom: 1px solid var(--border);
-  }
-  .section-badge {
-    background: var(--gold);
-    color: var(--navy);
-    font-size: 0.7rem; font-weight: 900;
-    padding: 2px 8px; border-radius: 4px;
-    letter-spacing: 1px;
-  }
-  .section-badge.red { background: var(--red); color: white; }
-  .section-badge.green { background: var(--green); color: white; }
-  .section-title { font-weight: 700; font-size: 1rem; }
-  .section-body { padding: 16px 18px; }
+/* ── 선택지 버튼 ── */
+.choices { display: flex; flex-direction: column; gap: 10px; }
+.choice-btn { background: var(--panel); border: 2px solid var(--border); border-radius: 10px; padding: 14px 18px; font-family: inherit; font-size: 0.9rem; color: var(--text); cursor: pointer; text-align: left; transition: all 0.15s; display: flex; align-items: flex-start; gap: 12px; }
+.choice-btn:hover { border-color: var(--gold); background: #1a2744; }
+.choice-btn .choice-icon { font-size: 1.3rem; flex-shrink: 0; margin-top: 2px; }
+.choice-btn .choice-text { line-height: 1.5; }
+.choice-btn .choice-sub { font-size: 0.78rem; color: var(--muted); margin-top: 3px; }
 
-  /* ── 대화창 (역전재판 스타일) ── */
-  .dialog-box {
-    background: #0d1b2a;
-    border: 2px solid #2e4a6e;
-    border-radius: 8px;
-    padding: 16px 18px;
-    margin-bottom: 12px;
-    position: relative;
-  }
-  .dialog-box::before {
-    content: attr(data-speaker);
-    position: absolute; top: -11px; left: 14px;
-    background: var(--navy);
-    border: 1px solid var(--gold);
-    color: var(--gold);
-    font-size: 0.72rem; font-weight: 700;
-    padding: 2px 10px; border-radius: 4px;
-    letter-spacing: 1px;
-  }
-  .dialog-box p { font-size: 0.9rem; line-height: 1.7; }
-  .dialog-box.mission {
-    border-color: var(--gold);
-    background: linear-gradient(135deg, #1a2744, #0d1b2a);
-  }
+/* ── 결과 카드 ── */
+.result-card { border-radius: 12px; padding: 24px; text-align: center; }
+.result-card.success { background: linear-gradient(135deg, #1a3a2a, #0d2a1a); border: 2px solid var(--green); }
+.result-card.failure { background: linear-gradient(135deg, #3a1a1a, #2a0d0d); border: 2px solid var(--red); }
+.result-card.neutral { background: linear-gradient(135deg, #1a2744, #0d1b2a); border: 2px solid var(--gold); }
+.result-icon { font-size: 3.5rem; margin-bottom: 12px; }
+.result-title { font-size: 1.4rem; font-weight: 900; margin-bottom: 8px; }
+.result-desc { font-size: 0.88rem; color: var(--muted); line-height: 1.7; }
 
-  /* ── 문제 ── */
-  .question-list { display: flex; flex-direction: column; gap: 14px; }
-  .question-item {
-    background: #0d1b2a;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 14px 16px;
-  }
-  .question-item .q-label {
-    font-size: 0.72rem; color: var(--gold);
-    font-weight: 700; letter-spacing: 1px;
-    margin-bottom: 6px;
-  }
-  .question-item .q-text {
-    font-size: 0.9rem; line-height: 1.6; margin-bottom: 10px;
-    color: var(--text);
-  }
-  .question-item .q-hint {
-    font-size: 0.78rem; color: var(--muted);
-    margin-bottom: 8px; font-style: italic;
-  }
-  .answer-input {
-    width: 100%;
-    background: #1e2d45;
-    border: 1px solid #2e4a6e;
-    border-radius: 6px;
-    color: #a8d8ff;
-    font-family: inherit; font-size: 0.9rem;
-    padding: 10px 12px;
-    resize: vertical;
-    transition: border-color 0.2s;
-  }
-  .answer-input:focus {
-    outline: none;
-    border-color: var(--gold);
-    background: #1a2744;
-  }
-  .answer-input::placeholder { color: #2e4a6e; }
+/* ── 지식 카드 ── */
+.knowledge { background: #0d1b2a; border-left: 3px solid var(--gold); border-radius: 0 8px 8px 0; padding: 14px 16px; font-size: 0.85rem; line-height: 1.7; }
+.knowledge .k-title { color: var(--gold); font-weight: 700; font-size: 0.78rem; letter-spacing: 1px; margin-bottom: 6px; }
 
-  /* ── 단답형 inline ── */
-  .inline-blank {
-    display: inline-block;
-    background: #1e2d45;
-    border-bottom: 2px solid var(--gold);
-    min-width: 100px;
-    padding: 2px 8px;
-    color: #a8d8ff;
-    font-weight: 700;
-    border-radius: 4px 4px 0 0;
-  }
+/* ── 스탯 ── */
+.stat-row { display: flex; gap: 10px; }
+.stat-item { flex: 1; background: #0d1b2a; border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; text-align: center; }
+.stat-item .s-label { font-size: 0.7rem; color: var(--muted); margin-bottom: 4px; }
+.stat-item .s-val { font-size: 1.1rem; font-weight: 900; color: var(--gold); }
 
-  /* ── 흐름도 ── */
-  .flow-chart {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    flex-wrap: wrap;
-    margin: 12px 0;
-  }
-  .flow-node {
-    background: #0d1b2a;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 8px 14px;
-    font-size: 0.85rem;
-    text-align: center;
-    min-width: 80px;
-  }
-  .flow-node.filled { border-color: var(--green); color: var(--green); }
-  .flow-node.blank {
-    border-color: var(--gold); border-style: dashed;
-    color: #3a5070;
-  }
-  .flow-node input {
-    background: transparent; border: none; outline: none;
-    color: var(--gold); font-family: inherit;
-    font-size: 0.85rem; width: 80px; text-align: center;
-  }
-  .flow-arrow { color: var(--muted); font-size: 1.2rem; }
+/* ── 헤더 ── */
+.top-bar { display: flex; justify-content: space-between; align-items: center; }
+.top-bar h2 { font-size: 1rem; font-weight: 700; color: var(--gold); }
+.top-bar .step-info { font-size: 0.78rem; color: var(--muted); }
 
-  /* ── OX 퀴즈 ── */
-  .ox-list { display: flex; flex-direction: column; gap: 8px; }
-  .ox-item {
-    display: flex; align-items: center; gap: 10px;
-    background: #0d1b2a;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 10px 14px;
-  }
-  .ox-num { color: var(--muted); font-size: 0.8rem; min-width: 20px; }
-  .ox-text { flex: 1; font-size: 0.88rem; }
-  .ox-btns { display: flex; gap: 6px; }
-  .ox-btn {
-    width: 36px; height: 36px;
-    border-radius: 50%;
-    border: 2px solid var(--border);
-    background: transparent;
-    color: var(--muted);
-    font-size: 1rem; font-weight: 900;
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-  .ox-btn:hover { transform: scale(1.1); }
-  .ox-btn.selected-o { border-color: var(--green); background: var(--green); color: white; }
-  .ox-btn.selected-x { border-color: var(--red); background: var(--red); color: white; }
+/* ── 인트로 ── */
+#screen-intro { justify-content: center; align-items: center; text-align: center; }
+.intro-title { font-size: 2rem; font-weight: 900; color: var(--gold); line-height: 1.2; }
+.intro-sub { color: var(--muted); font-size: 0.9rem; margin-top: 8px; }
+.intro-desc { font-size: 0.92rem; line-height: 1.8; color: var(--text); }
 
-  /* ── 완료 버튼 ── */
-  .btn-complete {
-    display: block; width: 100%;
-    background: linear-gradient(135deg, var(--gold), #e6b800);
-    color: var(--navy);
-    border: none; border-radius: 10px;
-    padding: 16px;
-    font-family: inherit; font-size: 1rem; font-weight: 900;
-    cursor: pointer; letter-spacing: 1px;
-    margin-top: 20px;
-    transition: opacity 0.2s, transform 0.1s;
-  }
-  .btn-complete:hover { opacity: 0.9; transform: translateY(-1px); }
-  .btn-complete:active { transform: translateY(0); }
+/* ── 투표 애니메이션 ── */
+.vote-bar { height: 12px; background: var(--border); border-radius: 6px; overflow: hidden; margin: 6px 0; }
+.vote-fill { height: 100%; border-radius: 6px; transition: width 1s ease; width: 0%; }
+.vote-fill.green { background: var(--green); }
+.vote-fill.red { background: var(--red); }
 
-  /* ── 인쇄 ── */
-  @media print {
-    body { background: white; color: black; padding: 0; }
-    .header { background: white; border-color: #333; }
-    .header-left h1 { color: #333; }
-    .section { border-color: #ccc; background: white; }
-    .section-header { background: #f5f5f5; }
-    .dialog-box { background: #f9f9f9; border-color: #ccc; }
-    .question-item { background: #f9f9f9; }
-    .answer-input { background: white; border-color: #999; color: black; }
-    .btn-complete { display: none; }
-    .progress-ring { display: none; }
-  }
+/* ── 최종 결과 ── */
+.score-board { display: flex; flex-direction: column; gap: 10px; }
+.score-row { display: flex; justify-content: space-between; align-items: center; background: #0d1b2a; border-radius: 8px; padding: 10px 14px; }
+.score-row .s-label { font-size: 0.85rem; color: var(--muted); }
+.score-row .s-badge { font-size: 0.85rem; font-weight: 700; }
+.score-row .s-badge.ok { color: var(--green); }
+.score-row .s-badge.fail { color: var(--red); }
 </style>
 </head>
 <body>
 
-<!-- ── 헤더 ── -->
-<div class="header">
-  <div class="header-left">
-    <h1>🏛️ 8차시 — 법을 만드는 국회</h1>
-    <p>Ⅱ. 헌법과 국가 기관 · 중3 사회 · 천재교육 p.32~35</p>
+<!-- ====== 인트로 ====== -->
+<div id="screen-intro" class="screen active">
+  <div style="font-size:3.5rem">🏛️</div>
+  <div>
+    <div class="intro-title">입법 시뮬레이션</div>
+    <div class="intro-sub">8차시 — 법을 만드는 국회 · 중3 사회</div>
   </div>
-  <div class="progress-ring">
-    <svg width="72" height="72" viewBox="0 0 72 72">
-      <circle cx="36" cy="36" r="30" fill="none" stroke="#1e2d45" stroke-width="6"/>
-      <circle id="progressCircle" cx="36" cy="36" r="30" fill="none"
-        stroke="#f5c842" stroke-width="6"
-        stroke-dasharray="188.5" stroke-dashoffset="188.5"/>
-    </svg>
-    <div class="progress-text">
-      <div id="progressPct">0%</div>
-      <span>완료</span>
+  <div class="panel">
+    <div class="intro-desc">
+      당신은 국회의원입니다.<br>
+      <span style="color:var(--gold);font-weight:700">「학교 스마트폰 보관함 의무 설치법」</span>을 발의했어요.<br><br>
+      법률이 되려면 5단계를 통과해야 합니다.<br>
+      잘못된 선택을 하면 법안이 폐기될 수도 있어요!
     </div>
+  </div>
+  <div class="stat-row">
+    <div class="stat-item"><div class="s-label">총 단계</div><div class="s-val">5</div></div>
+    <div class="stat-item"><div class="s-label">분기점</div><div class="s-val">8</div></div>
+    <div class="stat-item"><div class="s-label">결말</div><div class="s-val">4종</div></div>
+  </div>
+  <button class="btn btn-gold" onclick="startGame()">🚀 시뮬레이션 시작</button>
+</div>
+
+<!-- ====== STEP 1: 법률안 제출 ====== -->
+<div id="screen-s1" class="screen">
+  <div class="top-bar">
+    <h2>STEP 1 — 법률안 제출</h2>
+    <span class="step-info">1 / 5</span>
+  </div>
+  <div class="stepbar" id="stepbar"></div>
+  <div class="dialog">
+    <div class="dialog-speaker">📋 상황</div>
+    <p>당신은 <span class="highlight">「학교 스마트폰 보관함 의무 설치법」</span> 법률안을 준비했습니다.<br><br>
+    헌법 제52조에 따르면 법률안을 제출할 수 있는 주체는 <span class="highlight">국회의원</span>과 <span class="highlight">정부</span>입니다.<br><br>
+    누구의 이름으로 제출할까요?</p>
+  </div>
+  <div class="choices">
+    <button class="choice-btn" onclick="s1choose('의원')">
+      <span class="choice-icon">🧑‍⚖️</span>
+      <div class="choice-text">
+        <strong>의원 발의</strong>로 제출한다
+        <div class="choice-sub">국회의원 10인 이상이 공동 서명해서 제출</div>
+      </div>
+    </button>
+    <button class="choice-btn" onclick="s1choose('정부')">
+      <span class="choice-icon">🏢</span>
+      <div class="choice-text">
+        <strong>정부 제출</strong>로 낸다
+        <div class="choice-sub">교육부 장관이 국무회의 심의를 거쳐 제출</div>
+      </div>
+    </button>
+    <button class="choice-btn" onclick="s1choose('혼자')">
+      <span class="choice-icon">🙋</span>
+      <div class="choice-text">
+        <strong>나 혼자</strong> 제출한다
+        <div class="choice-sub">국회의원 1명이 단독으로 법안 제출</div>
+      </div>
+    </button>
   </div>
 </div>
 
-<!-- ── 학생 정보 ── -->
-<div class="student-bar">
-  <div class="field">
-    <label>반</label>
-    <input type="text" placeholder="3-1" id="s-class" oninput="updateProgress()">
+<!-- ====== STEP 1 결과 ====== -->
+<div id="screen-s1r" class="screen"></div>
+
+<!-- ====== STEP 2: 위원회 회부 ====== -->
+<div id="screen-s2" class="screen">
+  <div class="top-bar">
+    <h2>STEP 2 — 위원회 회부</h2>
+    <span class="step-info">2 / 5</span>
   </div>
-  <div class="field">
-    <label>번</label>
-    <input type="text" placeholder="01" id="s-num" oninput="updateProgress()">
+  <div class="stepbar" id="stepbar2"></div>
+  <div class="dialog">
+    <div class="dialog-speaker">📋 상황</div>
+    <p>법률안이 국회에 접수되었습니다!<br><br>
+    국회의장은 이 법안을 <span class="highlight">관련 상임위원회</span>에 회부해야 합니다.<br><br>
+    「학교 스마트폰 보관함 의무 설치법」은 어느 위원회로 보내야 할까요?</p>
   </div>
-  <div class="field" style="flex:2">
-    <label>이름</label>
-    <input type="text" placeholder="이름을 입력하세요" id="s-name" oninput="updateProgress()">
+  <div class="choices">
+    <button class="choice-btn" onclick="s2choose('교육')">
+      <span class="choice-icon">📚</span>
+      <div class="choice-text">
+        <strong>교육위원회</strong>
+        <div class="choice-sub">학교 관련 법안을 전문적으로 검토하는 위원회</div>
+      </div>
+    </button>
+    <button class="choice-btn" onclick="s2choose('법사')">
+      <span class="choice-icon">⚖️</span>
+      <div class="choice-text">
+        <strong>법제사법위원회</strong>
+        <div class="choice-sub">법안의 체계와 형식을 검토하는 위원회</div>
+      </div>
+    </button>
+    <button class="choice-btn" onclick="s2choose('국방')">
+      <span class="choice-icon">🪖</span>
+      <div class="choice-text">
+        <strong>국방위원회</strong>
+        <div class="choice-sub">국방·군사 관련 법안을 다루는 위원회</div>
+      </div>
+    </button>
   </div>
 </div>
 
-<!-- ── RPG 스탯창 ── -->
-<div class="stat-box">
-  <div class="stat-box-title">📊 국회 스탯</div>
-  <div class="stat-grid">
-    <div class="stat-item">
-      <div class="stat-label">총 의원 수</div>
-      <div class="stat-value">300명</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-label">임기</div>
-      <div class="stat-value">4년</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-label">지역구</div>
-      <div class="stat-value">254명</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-label">비례대표</div>
-      <div class="stat-value">46명</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-label">입법절차</div>
-      <div class="stat-value" style="font-size:0.85rem">5단계</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-label">시행 대기</div>
-      <div class="stat-value">20일</div>
-    </div>
+<div id="screen-s2r" class="screen"></div>
+
+<!-- ====== STEP 3: 본회의 표결 ====== -->
+<div id="screen-s3" class="screen">
+  <div class="top-bar">
+    <h2>STEP 3 — 본회의 표결</h2>
+    <span class="step-info">3 / 5</span>
+  </div>
+  <div class="stepbar" id="stepbar3"></div>
+  <div class="dialog">
+    <div class="dialog-speaker">🏛️ 본회의장</div>
+    <p>교육위원회 심의를 통과했습니다!<br><br>
+    이제 <span class="highlight">전체 국회의원 300명</span>이 참석하는 본회의에서 표결합니다.<br><br>
+    법안 통과 기준은 <span class="highlight">재적의원 과반수 출석, 출석의원 과반수 찬성</span>입니다.<br><br>
+    지금 분위기가 팽팽합니다. 당신의 전략은?</p>
+  </div>
+  <div class="choices">
+    <button class="choice-btn" onclick="s3choose('설득')">
+      <span class="choice-icon">🗣️</span>
+      <div class="choice-text">
+        <strong>반대 의원들을 적극 설득</strong>한다
+        <div class="choice-sub">5분 발언 기회를 활용해 법안의 필요성을 호소</div>
+      </div>
+    </button>
+    <button class="choice-btn" onclick="s3choose('수정')">
+      <span class="choice-icon">✏️</span>
+      <div class="choice-text">
+        <strong>수정안을 제출</strong>한다
+        <div class="choice-sub">일부 조항을 양보해 더 많은 동의를 얻는 전략</div>
+      </div>
+    </button>
+    <button class="choice-btn" onclick="s3choose('강행')">
+      <span class="choice-icon">🚀</span>
+      <div class="choice-text">
+        <strong>그냥 표결을 강행</strong>한다
+        <div class="choice-sub">이미 찬성 세가 충분하다고 판단, 즉시 표결 요청</div>
+      </div>
+    </button>
   </div>
 </div>
 
-<!-- ── STEP 0. 미션 상황 ── -->
-<div class="section">
-  <div class="section-header">
-    <span class="section-badge">STEP 0</span>
-    <span class="section-title">🎯 미션 상황</span>
-  </div>
-  <div class="section-body">
-    <div class="dialog-box mission" data-speaker="📢 상황">
-      <p>우리 반이 제안한 법안 <strong style="color:var(--gold)">「학교 스마트폰 보관함 의무 설치법」</strong></p>
-      <p style="margin-top:8px;color:var(--muted)">이 법안이 실제 법률이 되려면 어떤 과정을 거쳐야 할까? 국회는 이 법안을 어떻게 검토하고 결정할까?</p>
-    </div>
+<div id="screen-s3r" class="screen"></div>
 
-    <div class="question-list">
-      <div class="question-item" data-q="1">
-        <div class="q-label">Q 01</div>
-        <div class="q-text">교과서에서 <strong>'입법권'</strong>이 무엇인지 찾아 써 보기</div>
-        <textarea class="answer-input" rows="2" placeholder="교과서 내용을 참고해서 적어보세요…" oninput="updateProgress()"></textarea>
+<!-- ====== STEP 4: 대통령 ====== -->
+<div id="screen-s4" class="screen">
+  <div class="top-bar">
+    <h2>STEP 4 — 대통령 공포 또는 거부</h2>
+    <span class="step-info">4 / 5</span>
+  </div>
+  <div class="stepbar" id="stepbar4"></div>
+  <div class="dialog">
+    <div class="dialog-speaker">🏢 청와대</div>
+    <p>본회의를 통과했습니다! 🎉<br><br>
+    법안은 이제 <span class="highlight">대통령</span>에게 넘어갔습니다.<br>
+    대통령은 <span class="highlight">15일 이내</span>에 공포하거나 국회에 <span class="highlight">재의(거부권)</span>를 요구할 수 있습니다.<br><br>
+    <span style="color:var(--red)">⚠️ 대통령이 거부권을 행사했습니다!</span><br>
+    "학교의 자율성을 침해할 수 있다"는 이유입니다.<br><br>
+    어떻게 대응하겠습니까?</p>
+  </div>
+  <div class="choices">
+    <button class="choice-btn" onclick="s4choose('재의결')">
+      <span class="choice-icon">🗳️</span>
+      <div class="choice-text">
+        <strong>재의결을 요청</strong>한다
+        <div class="choice-sub">재적의원 과반수 출석 + 출석의원 2/3 이상 찬성이 필요</div>
       </div>
-      <div class="question-item" data-q="2">
-        <div class="q-label">Q 02</div>
-        <div class="q-text">이 법안과 가장 먼저 연결되는 국회의 권한은?</div>
-        <input type="text" class="answer-input" placeholder="권한 이름을 입력하세요" style="resize:none" oninput="updateProgress()">
+    </button>
+    <button class="choice-btn" onclick="s4choose('수정')">
+      <span class="choice-icon">🔧</span>
+      <div class="choice-text">
+        <strong>법안을 수정해서 다시 제출</strong>한다
+        <div class="choice-sub">대통령 의견을 반영해 조항을 고친 후 재출발</div>
       </div>
-      <div class="question-item" data-q="3">
-        <div class="q-label">Q 03</div>
-        <div class="q-text">이 법안을 다룰 가능성이 큰 국회 조직은?</div>
-        <input type="text" class="answer-input" placeholder="○○위원회" oninput="updateProgress()">
+    </button>
+    <button class="choice-btn" onclick="s4choose('포기')">
+      <span class="choice-icon">🏳️</span>
+      <div class="choice-text">
+        <strong>이번엔 포기</strong>한다
+        <div class="choice-sub">다음 회기를 기약하며 물러선다</div>
       </div>
-      <div class="question-item" data-q="4">
-        <div class="q-label">Q 04</div>
-        <div class="q-text">이 법안을 바로 국민투표로 정하지 않고 국회가 맡는 이유를 2줄로 써 보기</div>
-        <div class="q-hint">💡 힌트: 전문성, 효율성, 책임성 중 활용해보세요</div>
-        <textarea class="answer-input" rows="3" placeholder="이유를 적어보세요…" oninput="updateProgress()"></textarea>
-      </div>
-    </div>
+    </button>
   </div>
 </div>
 
-<!-- ── 입법 절차 흐름도 ── -->
-<div class="section">
-  <div class="section-header">
-    <span class="section-badge red">STEP 4</span>
-    <span class="section-title">📋 법은 어떻게 만들어질까?</span>
-  </div>
-  <div class="section-body">
-    <div class="dialog-box" data-speaker="⚖️ 법률 제정 흐름">
-      <p style="color:var(--muted);font-size:0.85rem;margin-bottom:12px">빈칸에 알맞은 단계를 채워 법안이 법률이 되는 과정을 완성하세요</p>
-      <div class="flow-chart">
-        <div class="flow-node filled">법률안<br>제출</div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-node blank"><input type="text" placeholder="?" oninput="updateProgress()"></div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-node blank"><input type="text" placeholder="상임위?" oninput="updateProgress()"></div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-node blank"><input type="text" placeholder="본회의?" oninput="updateProgress()"></div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-node blank"><input type="text" placeholder="대통령?" oninput="updateProgress()"></div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-node filled">공포 후<br>20일 시행</div>
-      </div>
-    </div>
+<div id="screen-s4r" class="screen"></div>
 
-    <div class="question-item" style="margin-top:12px" data-q="flow">
-      <div class="q-label">💭 심화</div>
-      <div class="q-text">대통령이 <strong>거부권</strong>을 행사하면 어떻게 될까?</div>
-      <textarea class="answer-input" rows="2" placeholder="국회는 어떻게 대응할 수 있을까요?" oninput="updateProgress()"></textarea>
+<!-- ====== STEP 5: 공포 및 시행 ====== -->
+<div id="screen-s5" class="screen">
+  <div class="top-bar">
+    <h2>STEP 5 — 공포 및 시행</h2>
+    <span class="step-info">5 / 5</span>
+  </div>
+  <div class="stepbar" id="stepbar5"></div>
+  <div class="dialog">
+    <div class="dialog-speaker">📰 관보</div>
+    <p>재의결 결과를 기다리는 중입니다.<br><br>
+    재적의원 <span class="highlight">300명</span> 중 <span class="highlight">200명 출석</span><br>
+    2/3 기준: <span class="highlight">134표 이상</span> 필요<br><br>
+    <span style="color:var(--gold)">개표 결과를 확인하겠습니까?</span></p>
+  </div>
+  <div id="vote-display" style="display:none">
+    <div style="margin: 8px 0">
+      <div style="display:flex;justify-content:space-between;font-size:0.82rem;margin-bottom:4px">
+        <span style="color:var(--green)">찬성</span><span id="yes-count" style="color:var(--green)">0표</span>
+      </div>
+      <div class="vote-bar"><div class="vote-fill green" id="yes-bar"></div></div>
+    </div>
+    <div>
+      <div style="display:flex;justify-content:space-between;font-size:0.82rem;margin-bottom:4px">
+        <span style="color:var(--red)">반대</span><span id="no-count" style="color:var(--red)">0표</span>
+      </div>
+      <div class="vote-bar"><div class="vote-fill red" id="no-bar"></div></div>
     </div>
   </div>
+  <button class="btn btn-gold" id="count-btn" onclick="countVotes()">🗳️ 개표 시작!</button>
 </div>
 
-<!-- ── 뉴스 분석 ── -->
-<div class="section">
-  <div class="section-header">
-    <span class="section-badge green">STEP 6</span>
-    <span class="section-title">📰 뉴스 분석</span>
+<!-- ====== 최종 결말 ====== -->
+<div id="screen-end-pass" class="screen">
+  <div class="result-card success">
+    <div class="result-icon">🎉</div>
+    <div class="result-title" style="color:var(--green)">법률 제정 성공!</div>
+    <div class="result-desc">「학교 스마트폰 보관함 의무 설치법」이 공포되어<br>20일 뒤부터 시행됩니다.</div>
   </div>
-  <div class="section-body">
-    <div class="dialog-box" data-speaker="📺 뉴스">
-      <p>"국회 교육위원회, <strong style="color:var(--gold)">학교 폭력 예방법 개정안</strong>을 본회의에 상정"</p>
-    </div>
-
-    <div class="question-list">
-      <div class="question-item" data-q="news1">
-        <div class="q-label">Q A</div>
-        <div class="q-text">이 뉴스와 직접 연결되는 국회 운영 원리는?</div>
-        <textarea class="answer-input" rows="2" placeholder="원리 이름 + 이유" oninput="updateProgress()"></textarea>
-      </div>
-      <div class="question-item" data-q="news2">
-        <div class="q-label">Q B</div>
-        <div class="q-text">왜 본회의 전에 교육위원회에서 먼저 심의하는가? <strong>(2가지)</strong></div>
-        <textarea class="answer-input" rows="4" placeholder="① …&#10;② …" oninput="updateProgress()"></textarea>
-      </div>
-      <div class="question-item" data-q="news3">
-        <div class="q-label">Q C</div>
-        <div class="q-text">삼권분립 관점에서 국회의 역할을 2줄로 설명하기</div>
-        <textarea class="answer-input" rows="3" placeholder="삼권분립이란… 국회는…" oninput="updateProgress()"></textarea>
-      </div>
-    </div>
+  <div class="knowledge">
+    <div class="k-title">📚 오늘 배운 것</div>
+    법률안 제출 → 위원회 회부 → 상임위 심의 → 본회의 의결 → 대통령 공포 → 시행<br><br>
+    재적과반 출석 + 출석과반 찬성 → 법안 통과<br>
+    거부권 행사 시: 재적과반 출석 + 출석 <strong style="color:var(--gold)">2/3</strong> 찬성으로 재의결
   </div>
+  <div id="end-score" class="score-board"></div>
+  <button class="btn btn-gold" onclick="restart()">🔄 다시 도전하기</button>
+  <button class="btn btn-outline" onclick="goIntro()">🏠 처음으로</button>
 </div>
 
-<!-- ── OX 확인 ── -->
-<div class="section">
-  <div class="section-header">
-    <span class="section-badge">OX</span>
-    <span class="section-title">✅ 최종 확인 퀴즈</span>
+<div id="screen-end-fail" class="screen">
+  <div class="result-card failure">
+    <div class="result-icon">💔</div>
+    <div class="result-title" style="color:var(--red)">법안 폐기</div>
+    <div class="result-desc" id="fail-reason">이번 법안은 통과되지 못했습니다.</div>
   </div>
-  <div class="section-body">
-    <div class="ox-list">
-      <div class="ox-item">
-        <span class="ox-num">1</span>
-        <span class="ox-text">입법권은 헌법에 따라 국회에 속한다.</span>
-        <div class="ox-btns">
-          <button class="ox-btn" onclick="selectOX(this,'o')" data-q="ox1">O</button>
-          <button class="ox-btn" onclick="selectOX(this,'x')" data-q="ox1">X</button>
-        </div>
-      </div>
-      <div class="ox-item">
-        <span class="ox-num">2</span>
-        <span class="ox-text">삼권분립은 권력 집중을 강화하기 위한 제도이다.</span>
-        <div class="ox-btns">
-          <button class="ox-btn" onclick="selectOX(this,'o')" data-q="ox2">O</button>
-          <button class="ox-btn" onclick="selectOX(this,'x')" data-q="ox2">X</button>
-        </div>
-      </div>
-      <div class="ox-item">
-        <span class="ox-num">3</span>
-        <span class="ox-text">국회 의원의 임기는 4년이다.</span>
-        <div class="ox-btns">
-          <button class="ox-btn" onclick="selectOX(this,'o')" data-q="ox3">O</button>
-          <button class="ox-btn" onclick="selectOX(this,'x')" data-q="ox3">X</button>
-        </div>
-      </div>
-      <div class="ox-item">
-        <span class="ox-num">4</span>
-        <span class="ox-text">예산안은 정부가 편성하고 국회가 심의·확정한다.</span>
-        <div class="ox-btns">
-          <button class="ox-btn" onclick="selectOX(this,'o')" data-q="ox4">O</button>
-          <button class="ox-btn" onclick="selectOX(this,'x')" data-q="ox4">X</button>
-        </div>
-      </div>
-      <div class="ox-item">
-        <span class="ox-num">5</span>
-        <span class="ox-text">대통령이 거부권을 행사해도 국회는 다시 심사할 수 없다.</span>
-        <div class="ox-btns">
-          <button class="ox-btn" onclick="selectOX(this,'o')" data-q="ox5">O</button>
-          <button class="ox-btn" onclick="selectOX(this,'x')" data-q="ox5">X</button>
-        </div>
-      </div>
-    </div>
+  <div class="knowledge">
+    <div class="k-title">📚 다시 생각해보기</div>
+    <div id="fail-knowledge"></div>
   </div>
+  <button class="btn btn-gold" onclick="restart()">🔄 다시 도전하기</button>
+  <button class="btn btn-outline" onclick="goIntro()">🏠 처음으로</button>
 </div>
 
-<!-- ── 완료 ── -->
-<button class="btn-complete" onclick="complete()">
-  🏛️ 제출 완료 / PDF로 저장
-</button>
+<div id="screen-end-modify" class="screen">
+  <div class="result-card neutral">
+    <div class="result-icon">🔧</div>
+    <div class="result-title" style="color:var(--gold)">수정 후 재도전</div>
+    <div class="result-desc">대통령 의견을 반영해 법안을 수정했습니다.<br>다음 회기에 더 강력하게 돌아올 것입니다!</div>
+  </div>
+  <div class="knowledge">
+    <div class="k-title">📚 알고 가기</div>
+    대통령이 거부권을 행사하면 국회는 재의를 요구할 수 있습니다.<br>
+    재의결에 실패하면 법안은 폐기되거나 수정해서 다시 제출해야 합니다.<br><br>
+    <span style="color:var(--gold)">이것이 바로 삼권분립의 견제 기능입니다!</span>
+  </div>
+  <button class="btn btn-gold" onclick="restart()">🔄 처음부터 다시하기</button>
+</div>
 
 <script>
-  const oxState = {};
+// ─── 상태 ───
+let state = {
+  s1: null, s2: null, s3: null, s4: null,
+  correct: 0, total: 0
+};
 
-  function selectOX(btn, type) {
-    const q = btn.dataset.q;
-    const btns = btn.closest('.ox-btns').querySelectorAll('.ox-btn');
-    btns.forEach(b => b.classList.remove('selected-o','selected-x'));
-    if (type === 'o') btn.classList.add('selected-o');
-    else btn.classList.add('selected-x');
-    oxState[q] = type;
-    updateProgress();
+const STEPS = ['제출', '위원회', '본회의', '대통령', '시행'];
+
+function renderStepbar(id, current) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  let html = '';
+  STEPS.forEach((s, i) => {
+    if (i > 0) html += `<div class="step-line ${i < current ? 'done' : ''}"></div>`;
+    const cls = i + 1 < current ? 'done' : i + 1 === current ? 'current' : '';
+    html += `<div class="step-dot ${cls}">${i + 1 < current ? '✓' : i + 1}</div>`;
+  });
+  el.innerHTML = html;
+}
+
+function show(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const el = document.getElementById('screen-' + id);
+  if (el) { el.classList.add('active'); window.scrollTo(0,0); }
+}
+
+function startGame() {
+  state = { s1: null, s2: null, s3: null, s4: null, correct: 0, total: 0 };
+  renderStepbar('stepbar', 1);
+  show('s1');
+}
+
+function restart() { startGame(); }
+function goIntro() { show('intro'); }
+
+// ─── STEP 1 ───
+function s1choose(v) {
+  state.s1 = v; state.total++;
+  const screen = document.getElementById('screen-s1r');
+  screen.innerHTML = '';
+  screen.classList.remove('active');
+
+  let html = '';
+  if (v === '혼자') {
+    state.correct; // wrong, no increment
+    html = `
+      <div class="top-bar"><h2>STEP 1 결과</h2><span class="step-info">❌ 오답</span></div>
+      <div class="result-card failure">
+        <div class="result-icon">❌</div>
+        <div class="result-title" style="color:var(--red)">법안 제출 실패!</div>
+        <div class="result-desc">의원 발의는 <strong>10인 이상</strong>의 찬성 서명이 필요합니다.<br>혼자서는 제출할 수 없어요!</div>
+      </div>
+      <div class="knowledge">
+        <div class="k-title">📚 알고 가기</div>
+        헌법 제52조: 국회의원과 정부는 법률안을 제출할 수 있다.<br>
+        의원 발의 시 <strong style="color:var(--gold)">10인 이상</strong> 찬성 서명 필요<br>
+        (예산 관련 법안은 30인 이상)
+      </div>
+      <button class="btn btn-gold" onclick="s1retry()">↩️ 다시 선택하기</button>
+    `;
+  } else {
+    state.correct++;
+    const isGov = v === '정부';
+    html = `
+      <div class="top-bar"><h2>STEP 1 결과</h2><span class="step-info">✅ 정답</span></div>
+      <div class="result-card success">
+        <div class="result-icon">${isGov ? '🏢' : '🧑‍⚖️'}</div>
+        <div class="result-title" style="color:var(--green)">${isGov ? '정부 제출 완료!' : '의원 발의 완료!'}</div>
+        <div class="result-desc">${isGov ? '교육부 장관이 국무회의를 거쳐 법안을 제출했습니다.' : '동료 의원 10명의 서명을 받아 법안을 제출했습니다.'}</div>
+      </div>
+      <div class="knowledge">
+        <div class="k-title">📚 알고 가기</div>
+        법률안 제출 가능 주체: <strong style="color:var(--gold)">국회의원(10인↑)</strong> / <strong style="color:var(--gold)">정부</strong><br>
+        ${isGov ? '정부 제출: 국무회의 심의 → 대통령 승인 → 국회 제출' : '의원 발의: 10인 이상 서명 → 국회의장 접수'}
+      </div>
+      <button class="btn btn-gold" onclick="goS2()">➡️ STEP 2로 이동</button>
+    `;
   }
+  screen.innerHTML = html;
+  show('s1r');
+}
 
-  function updateProgress() {
-    const inputs = document.querySelectorAll('.answer-input, .flow-node input, .student-bar input');
-    let filled = 0;
-    inputs.forEach(i => { if (i.value.trim()) filled++; });
-    const oxFilled = Object.keys(oxState).length;
-    const total = inputs.length + 5; // 5 OX
-    const pct = Math.round(((filled + oxFilled) / total) * 100);
-    document.getElementById('progressPct').textContent = pct + '%';
-    const circle = document.getElementById('progressCircle');
-    const circumference = 188.5;
-    circle.style.strokeDashoffset = circumference - (circumference * pct / 100);
+function s1retry() {
+  renderStepbar('stepbar', 1);
+  show('s1');
+}
+
+function goS2() {
+  renderStepbar('stepbar2', 2);
+  show('s2');
+}
+
+// ─── STEP 2 ───
+function s2choose(v) {
+  state.s2 = v; state.total++;
+  const screen = document.getElementById('screen-s2r');
+  let html = '';
+
+  if (v === '국방') {
+    html = `
+      <div class="top-bar"><h2>STEP 2 결과</h2><span class="step-info">❌ 오답</span></div>
+      <div class="result-card failure">
+        <div class="result-icon">🪖</div>
+        <div class="result-title" style="color:var(--red)">엉뚱한 위원회!</div>
+        <div class="result-desc">국방위원회는 군사·안보 법안을 담당합니다.<br>학교 법안이 여기 오면 심의 자체가 안 됩니다!</div>
+      </div>
+      <div class="knowledge">
+        <div class="k-title">📚 알고 가기</div>
+        국회 상임위원회는 분야별로 나뉩니다:<br>
+        교육위 → 학교·교육 / 법사위 → 법체계 검토 / 국방위 → 군사안보<br>
+        법안은 <strong style="color:var(--gold)">관련 상임위원회</strong>에 자동 회부됩니다.
+      </div>
+      <button class="btn btn-gold" onclick="s2retry()">↩️ 다시 선택하기</button>
+    `;
+  } else {
+    state.correct++;
+    const isEdu = v === '교육';
+    html = `
+      <div class="top-bar"><h2>STEP 2 결과</h2><span class="step-info">✅ 정답</span></div>
+      <div class="result-card success">
+        <div class="result-icon">${isEdu ? '📚' : '⚖️'}</div>
+        <div class="result-title" style="color:var(--green)">${isEdu ? '교육위원회 회부!' : '법사위도 거칩니다!'}</div>
+        <div class="result-desc">${isEdu
+          ? '법안이 교육위원회에 회부되어 전문가들의 심의를 받게 됩니다.'
+          : '법사위는 모든 법안의 체계·자구를 최종 점검합니다. 교육위 심의 후 법사위도 거칩니다!'}</div>
+      </div>
+      <div class="knowledge">
+        <div class="k-title">📚 알고 가기</div>
+        상임위원회 심의: 공청회 → 소위원회 → 전체회의 순서로 진행<br>
+        <strong style="color:var(--gold)">위원회 중심주의</strong>: 전문성 확보 + 효율적 심의를 위해 분야별 위원회가 먼저 검토
+      </div>
+      <button class="btn btn-gold" onclick="goS3()">➡️ STEP 3으로 이동</button>
+    `;
   }
+  screen.innerHTML = html;
+  show('s2r');
+}
 
-  function complete() {
-    const name = document.getElementById('s-name').value || '이름없음';
-    const cls = document.getElementById('s-class').value || '--';
-    const num = document.getElementById('s-num').value || '--';
-    
-    const allAnswers = document.querySelectorAll('.answer-input, .flow-node input');
-    let allFilled = true;
-    allAnswers.forEach(i => { if (!i.value.trim()) allFilled = false; });
-    
-    if (!allFilled) {
-      if (!confirm('아직 비어있는 답이 있어요. 그래도 저장할까요?')) return;
+function s2retry() { renderStepbar('stepbar2', 2); show('s2'); }
+function goS3() { renderStepbar('stepbar3', 3); show('s3'); }
+
+// ─── STEP 3 ───
+function s3choose(v) {
+  state.s3 = v; state.total++;
+  const screen = document.getElementById('screen-s3r');
+  let html = '';
+
+  if (v === '강행') {
+    html = `
+      <div class="top-bar"><h2>STEP 3 결과</h2><span class="step-info">❌ 부결</span></div>
+      <div class="result-card failure">
+        <div class="result-icon">🚫</div>
+        <div class="result-title" style="color:var(--red)">법안 부결!</div>
+        <div class="result-desc">강행 표결 결과 찬성 143표 — 반대 157표<br>과반수에 7표 모자랐습니다. 법안이 폐기됩니다.</div>
+      </div>
+      <div class="knowledge">
+        <div class="k-title">📚 알고 가기</div>
+        본회의 의결 기준: <strong style="color:var(--gold)">재적의원 과반수 출석 + 출석의원 과반수 찬성</strong><br>
+        부결된 법안은 같은 회기에 다시 제출 불가 (일사부재의 원칙)
+      </div>
+      <button class="btn btn-red" onclick="endFail('법안이 본회의에서 부결되었습니다. 찬성이 과반수에 미치지 못했어요.', '본회의 의결 기준은 재적의원 과반수 출석 + 출석의원 과반수 찬성입니다. 팽팽한 상황에서는 반대 의원 설득이 중요합니다.')">📋 결과 확인</button>
+    `;
+  } else {
+    state.correct++;
+    const isMod = v === '수정';
+    html = `
+      <div class="top-bar"><h2>STEP 3 결과</h2><span class="step-info">✅ 가결!</span></div>
+      <div class="result-card success">
+        <div class="result-icon">🗳️</div>
+        <div class="result-title" style="color:var(--green)">본회의 통과!</div>
+        <div class="result-desc">${isMod
+          ? '수정안이 더 많은 지지를 얻었습니다! 찬성 178표 — 반대 122표'
+          : '설득 전략 성공! 찬성 162표 — 반대 138표, 과반수 달성!'}</div>
+      </div>
+      <div style="margin-top:4px">
+        <div style="display:flex;justify-content:space-between;font-size:0.82rem;margin-bottom:4px"><span style="color:var(--green)">찬성</span><span style="color:var(--green)">${isMod?178:162}표</span></div>
+        <div class="vote-bar"><div class="vote-fill green" style="width:${isMod?59:54}%"></div></div>
+        <div style="display:flex;justify-content:space-between;font-size:0.82rem;margin:6px 0 4px"><span style="color:var(--red)">반대</span><span style="color:var(--red)">${isMod?122:138}표</span></div>
+        <div class="vote-bar"><div class="vote-fill red" style="width:${isMod?41:46}%"></div></div>
+      </div>
+      <div class="knowledge">
+        <div class="k-title">📚 알고 가기</div>
+        의결 성공! 이제 법안은 <strong style="color:var(--gold)">대통령</strong>에게 넘어갑니다.<br>
+        대통령은 15일 이내에 공포하거나 거부권(재의 요구)을 행사할 수 있습니다.
+      </div>
+      <button class="btn btn-gold" onclick="goS4()">➡️ STEP 4로 이동</button>
+    `;
+  }
+  screen.innerHTML = html;
+  show('s3r');
+}
+
+function goS4() { renderStepbar('stepbar4', 4); show('s4'); }
+
+// ─── STEP 4 ───
+function s4choose(v) {
+  state.s4 = v; state.total++;
+  if (v === '포기') {
+    endFail('포기를 선택했습니다. 이번 법안은 폐기됩니다.', '대통령이 거부권을 행사해도 국회는 재의결로 맞설 수 있습니다. 재적과반 출석 + 출석 2/3 찬성이면 대통령 서명 없이도 법률로 확정됩니다!');
+    return;
+  }
+  if (v === '수정') {
+    document.getElementById('screen-end-modify').classList.add('active');
+    window.scrollTo(0,0);
+    show('end-modify');
+    return;
+  }
+  // 재의결
+  state.correct++;
+  renderStepbar('stepbar5', 5);
+  show('s5');
+}
+
+// ─── STEP 5: 개표 ───
+function countVotes() {
+  document.getElementById('vote-display').style.display = 'block';
+  document.getElementById('count-btn').style.display = 'none';
+
+  // 재의결 통과 시나리오: 141표 (2/3 = 133.3 → 134 이상 필요)
+  const yes = 141, no = 59, total = 200;
+  let y = 0, n = 0;
+  const interval = setInterval(() => {
+    y = Math.min(y + 3, yes);
+    n = Math.min(n + 1, no);
+    document.getElementById('yes-count').textContent = y + '표';
+    document.getElementById('no-count').textContent = n + '표';
+    document.getElementById('yes-bar').style.width = (y/total*100) + '%';
+    document.getElementById('no-bar').style.width = (n/total*100) + '%';
+    if (y >= yes && n >= no) {
+      clearInterval(interval);
+      setTimeout(endPass, 800);
     }
-    
-    document.title = `[${cls}반 ${num}번 ${name}] 8차시_국회`;
-    window.print();
-  }
+  }, 40);
+}
+
+// ─── 최종 결말 ───
+function endPass() {
+  state.correct++;
+  const scoreEl = document.getElementById('end-score');
+  const steps = [
+    { label: 'STEP 1 법률안 제출', ok: state.s1 !== '혼자' },
+    { label: 'STEP 2 위원회 선택', ok: state.s2 !== '국방' },
+    { label: 'STEP 3 본회의 전략', ok: state.s3 !== '강행' },
+    { label: 'STEP 4 거부권 대응', ok: state.s4 === '재의결' },
+  ];
+  scoreEl.innerHTML = steps.map(s => `
+    <div class="score-row">
+      <span class="s-label">${s.label}</span>
+      <span class="s-badge ${s.ok ? 'ok' : 'fail'}">${s.ok ? '✅ 정답' : '❌ 재도전 필요'}</span>
+    </div>
+  `).join('');
+  show('end-pass');
+}
+
+function endFail(reason, knowledge) {
+  document.getElementById('fail-reason').textContent = reason;
+  document.getElementById('fail-knowledge').innerHTML = knowledge;
+  show('end-fail');
+}
 </script>
 </body>
 </html>
