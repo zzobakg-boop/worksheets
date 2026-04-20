@@ -3,36 +3,144 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>중3 사회 수업자료</title>
+<title>천대현 수업자료 허브</title>
 <style>
-  body { font-family: 'Apple SD Gothic Neo', sans-serif; background: #0d1b2a; color: #e8f0fe; padding: 40px 20px; max-width: 640px; margin: 0 auto; }
-  h1 { color: #f5c842; margin-bottom: 4px; }
-  .sub { color: #8badd3; font-size: 0.88rem; margin-bottom: 32px; }
-  .section-label { font-size: 0.72rem; font-weight: 700; color: #8badd3; letter-spacing: 2px; margin-bottom: 10px; margin-top: 28px; }
-  .card { background: #1e2d45; border: 1px solid #2e4a6e; border-radius: 10px; padding: 18px 20px; margin-bottom: 10px; text-decoration: none; display: block; transition: border-color 0.2s, transform 0.15s; }
+  * { box-sizing: border-box; }
+  body { font-family: 'Apple SD Gothic Neo', sans-serif; background: #0d1b2a; color: #e8f0fe; padding: 32px 16px 64px; max-width: 820px; margin: 0 auto; }
+  h1 { color: #f5c842; margin: 0 0 4px; font-size: 1.6rem; }
+  .sub { color: #8badd3; font-size: 0.88rem; margin-bottom: 28px; }
+  .tabs { display: flex; gap: 6px; margin-bottom: 20px; flex-wrap: wrap; }
+  .tab { background: #1e2d45; border: 1px solid #2e4a6e; color: #8badd3; padding: 8px 14px; border-radius: 999px; cursor: pointer; font-size: 0.82rem; font-family: inherit; transition: all 0.15s; }
+  .tab:hover { border-color: #f5c842; color: #e8f0fe; }
+  .tab.active { background: #f5c842; color: #1a2744; border-color: #f5c842; font-weight: 700; }
+  .section-label { font-size: 0.72rem; font-weight: 700; color: #8badd3; letter-spacing: 2px; margin: 28px 0 10px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; }
+  .card { background: #1e2d45; border: 1px solid #2e4a6e; border-radius: 10px; padding: 16px 18px; text-decoration: none; display: block; transition: border-color 0.2s, transform 0.15s; }
   .card:hover { border-color: #f5c842; transform: translateY(-2px); }
-  .badge { font-size: 0.7rem; background: #f5c842; color: #1a2744; padding: 2px 8px; border-radius: 4px; font-weight: 700; margin-bottom: 8px; display: inline-block; }
-  .badge.sim { background: #3498db; color: white; }
-  .card h2 { color: #e8f0fe; font-size: 0.98rem; margin: 0 0 4px; }
-  .card p { color: #8badd3; font-size: 0.8rem; margin: 0; }
+  .card-row { display: flex; gap: 6px; margin-bottom: 8px; flex-wrap: wrap; }
+  .badge { font-size: 0.68rem; background: #f5c842; color: #1a2744; padding: 2px 8px; border-radius: 4px; font-weight: 700; display: inline-block; }
+  .badge.sim { background: #e74c3c; color: white; }
+  .badge.rev { background: #27ae60; color: white; }
+  .badge.hist { background: #9b59b6; color: white; }
+  .badge.sub { background: #34495e; color: #e8f0fe; }
+  .card h2 { color: #e8f0fe; font-size: 0.98rem; margin: 0 0 4px; line-height: 1.35; }
+  .card p { color: #8badd3; font-size: 0.8rem; margin: 0; line-height: 1.4; }
+  .hidden { display: none; }
+  .footer { color: #5a7ba3; font-size: 0.75rem; margin-top: 48px; text-align: center; }
 </style>
 </head>
 <body>
-  <h1>🏛️ 중3 사회 수업자료</h1>
-  <p class="sub">천대현 선생님 · Ⅱ. 헌법과 국가 기관</p>
+  <h1>🏛️ 천대현 수업자료 허브</h1>
+  <p class="sub">중3 사회 · 중2 역사 · 시뮬레이션 · 웹 학습지</p>
 
-  <div class="section-label">🎮 시뮬레이션</div>
-  <a class="card" href="8차시_입법시뮬레이션.html">
-    <div class="badge sim">SIMULATION</div>
-    <h2>🏛️ 입법 시뮬레이션 — 법을 만드는 국회</h2>
-    <p>8차시 · 국회의원이 되어 법안을 통과시켜보세요 (5단계 분기형)</p>
-  </a>
+  <div class="tabs">
+    <button class="tab active" data-filter="all">전체</button>
+    <button class="tab" data-filter="sim">🎮 시뮬레이션</button>
+    <button class="tab" data-filter="soc">📘 사회②</button>
+    <button class="tab" data-filter="hist">📚 역사①</button>
+    <button class="tab" data-filter="rev">🔁 복습용</button>
+  </div>
 
-  <div class="section-label">📝 웹 학습지</div>
-  <a class="card" href="8차시_국회.html">
-    <div class="badge">8차시</div>
-    <h2>법을 만드는 국회 — 웹 학습지</h2>
-    <p>타이핑 입력 · OX 퀴즈 · PDF 저장</p>
-  </a>
+  <!-- 🎮 시뮬레이션 -->
+  <div class="section-label" data-group="sim">🎮 시뮬레이션 · 역할극</div>
+  <div class="grid">
+    <a class="card" data-tag="sim soc" href="8차시_입법시뮬레이션.html">
+      <div class="card-row"><span class="badge sim">SIM</span><span class="badge sub">사회②</span><span class="badge">8차시</span></div>
+      <h2>🏛️ 입법 시뮬레이션 — 법을 만드는 국회</h2>
+      <p>국회의원이 되어 법안을 통과시켜보세요 · 5단계 분기형</p>
+    </a>
+    <a class="card" data-tag="sim soc" href="https://zzobakg-boop.github.io/vault-rag/worksheets/사법부_역전재판.html">
+      <div class="card-row"><span class="badge sim">SIM</span><span class="badge sub">사회②</span></div>
+      <h2>⚖️ 사법부 역전재판</h2>
+      <p>검사·변호사 대결 역할극 UI로 배우는 사법 절차</p>
+    </a>
+    <a class="card" data-tag="sim hist" href="https://zzobakg-boop.github.io/history-simulator/">
+      <div class="card-row"><span class="badge sim">SIM</span><span class="badge hist">역사①</span></div>
+      <h2>🕹️ 역사 시뮬레이터</h2>
+      <p>역사① 단원별 인터랙티브 시뮬레이션 모음</p>
+    </a>
+  </div>
+
+  <!-- 📘 사회② 학습지 -->
+  <div class="section-label" data-group="soc">📘 사회② 학습지</div>
+  <div class="grid">
+    <a class="card" data-tag="soc" href="8차시_국회.html">
+      <div class="card-row"><span class="badge sub">사회②</span><span class="badge">8차시</span></div>
+      <h2>법을 만드는 국회 — 웹 학습지</h2>
+      <p>타이핑 입력 · OX 퀴즈 · PDF 저장</p>
+    </a>
+    <a class="card" data-tag="soc" href="https://zzobakg-boop.github.io/vault-rag/worksheets/8차시_개념편.html">
+      <div class="card-row"><span class="badge sub">사회②</span><span class="badge">8차시</span></div>
+      <h2>국회 — 개념편</h2>
+      <p>개념 정리 중심 웹 학습지</p>
+    </a>
+    <a class="card" data-tag="soc" href="https://zzobakg-boop.github.io/vault-rag/worksheets/10차시_개념편.html">
+      <div class="card-row"><span class="badge sub">사회②</span><span class="badge">10차시</span></div>
+      <h2>행정부와 대통령 — 개념편</h2>
+      <p>개념 정리 중심 웹 학습지</p>
+    </a>
+    <a class="card" data-tag="soc" href="https://zzobakg-boop.github.io/vault-rag/worksheets/11차시_개념편.html">
+      <div class="card-row"><span class="badge sub">사회②</span><span class="badge">11차시</span></div>
+      <h2>법원 — 개념편</h2>
+      <p>개념 정리 중심 웹 학습지</p>
+    </a>
+  </div>
+
+  <!-- 📚 역사① 학습지 -->
+  <div class="section-label" data-group="hist">📚 역사① 학습지</div>
+  <div class="grid">
+    <a class="card" data-tag="hist" href="https://zzobakg-boop.github.io/vault-rag/worksheets/E05_진한_개념편.html">
+      <div class="card-row"><span class="badge hist">역사①</span><span class="badge">E05</span></div>
+      <h2>진한의 통일과 발전 — 개념편</h2>
+      <p>진·한 통합 구성 (한나라 단독본은 볼트)</p>
+    </a>
+    <a class="card" data-tag="hist" href="https://zzobakg-boop.github.io/vault-rag/worksheets/봉건제vs군현제.html">
+      <div class="card-row"><span class="badge hist">역사①</span><span class="badge">비교</span></div>
+      <h2>봉건제 vs 군현제</h2>
+      <p>주·진 통치체제 비교 학습지</p>
+    </a>
+  </div>
+
+  <!-- 🔁 복습용 -->
+  <div class="section-label" data-group="rev">🔁 복습용 (빈칸 강화)</div>
+  <div class="grid">
+    <a class="card" data-tag="rev soc" href="https://zzobakg-boop.github.io/vault-rag/worksheets/11차시_개념편_복습용.html">
+      <div class="card-row"><span class="badge rev">복습</span><span class="badge sub">사회②</span><span class="badge">11차시</span></div>
+      <h2>법원 — 복습용</h2>
+      <p>빈칸 밀도 강화판</p>
+    </a>
+    <a class="card" data-tag="rev hist" href="https://zzobakg-boop.github.io/vault-rag/worksheets/E05_진한_개념편_복습용.html">
+      <div class="card-row"><span class="badge rev">복습</span><span class="badge hist">역사①</span><span class="badge">E05</span></div>
+      <h2>진한의 통일과 발전 — 복습용</h2>
+      <p>빈칸 밀도 강화판</p>
+    </a>
+  </div>
+
+  <p class="footer">zzobakg-boop/worksheets · vault-rag · history-simulator 통합 허브</p>
+
+<script>
+  const tabs = document.querySelectorAll('.tab');
+  const cards = document.querySelectorAll('.card');
+  const labels = document.querySelectorAll('.section-label');
+
+  tabs.forEach(tab => tab.addEventListener('click', () => {
+    tabs.forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    const f = tab.dataset.filter;
+
+    cards.forEach(c => {
+      const tags = (c.dataset.tag || '').split(' ');
+      c.classList.toggle('hidden', f !== 'all' && !tags.includes(f));
+    });
+
+    labels.forEach(l => {
+      const g = l.dataset.group;
+      const grid = l.nextElementSibling;
+      const visible = [...grid.querySelectorAll('.card')].some(c => !c.classList.contains('hidden'));
+      l.classList.toggle('hidden', !visible);
+      grid.classList.toggle('hidden', !visible);
+    });
+  }));
+</script>
 </body>
 </html>
