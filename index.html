@@ -24,6 +24,7 @@
   .badge.hist { background: #9b59b6; color: white; }
   .badge.sub { background: #34495e; color: #e8f0fe; }
   .badge.eval { background: #ff6b35; color: white; }
+  .badge.intro { background: #16a3a3; color: white; }
   .card h2 { color: #e8f0fe; font-size: 0.98rem; margin: 0 0 4px; line-height: 1.35; }
   .card p { color: #8badd3; font-size: 0.8rem; margin: 0; line-height: 1.4; }
   .hidden { display: none; }
@@ -36,10 +37,21 @@
 
   <div class="tabs">
     <button class="tab active" data-filter="all">전체</button>
+    <button class="tab" data-filter="intro">🎬 도입</button>
     <button class="tab" data-filter="sim">🎮 시뮬레이션</button>
     <button class="tab" data-filter="soc">📘 사회②</button>
     <button class="tab" data-filter="hist">📚 역사①</button>
     <button class="tab" data-filter="rev">🔁 복습용</button>
+  </div>
+
+  <!-- 🎬 도입 (생각 여는 활동) -->
+  <div class="section-label" data-group="intro">🎬 도입 · 생각 여는 활동</div>
+  <div class="grid">
+    <a class="card" data-tag="intro hist" href="https://zzobakg-boop.github.io/vault-rag/worksheets/도입_삼국지와기억_위진남북조.html">
+      <div class="card-row"><span class="badge intro">도입</span><span class="badge hist">역사①</span><span class="badge">3-1-1</span><span class="badge">생각열기</span></div>
+      <h2>삼국지, 왜 우리 반은 모를까? — 세대·미디어·기억</h2>
+      <p>위진 남북조 들어가기 전 생각 여는 활동 · "이긴 자 ≠ 기억되는 자" · 서술 제출(세특)</p>
+    </a>
   </div>
 
   <!-- 🎮 시뮬레이션 -->
