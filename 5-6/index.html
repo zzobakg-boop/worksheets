@@ -4,25 +4,25 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>사회② 시험 범위 학습지</title>
-<meta name="description" content="중3 사회② Ⅴ·Ⅵ단원 학습지 11장을 한 곳에서 여는 목차">
+<meta name="description" content="중3 사회② Ⅴ·Ⅵ단원 학습지 10장과 답 확인을 한 곳에서">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📘</text></svg>">
 <style>
   :root{
     --bg:#f2f6fc; --panel:#ffffff; --ink:#16233a; --dim:#5c6f8c;
     --line:#d9e3f2; --accent:#1f4d8f; --accent-soft:#e6eefb;
-    --rev:#1c7a53; --rev-soft:#e2f3ec; --shadow:0 1px 2px rgba(22,35,58,.06);
+    --ans:#9a5b00; --ans-soft:#fdf0d9; --shadow:0 1px 2px rgba(22,35,58,.06);
   }
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]){
       --bg:#0e1726; --panel:#18243a; --ink:#e7eefb; --dim:#9db0cd;
       --line:#2b3c59; --accent:#7fb0ff; --accent-soft:#1d2d47;
-      --rev:#63d6a6; --rev-soft:#16302a; --shadow:none;
+      --ans:#f0c070; --ans-soft:#33280f; --shadow:none;
     }
   }
   :root[data-theme="dark"]{
     --bg:#0e1726; --panel:#18243a; --ink:#e7eefb; --dim:#9db0cd;
     --line:#2b3c59; --accent:#7fb0ff; --accent-soft:#1d2d47;
-    --rev:#63d6a6; --rev-soft:#16302a; --shadow:none;
+    --ans:#f0c070; --ans-soft:#33280f; --shadow:none;
   }
   *{box-sizing:border-box}
   body{
@@ -31,7 +31,6 @@
     padding:28px 16px 56px; max-width:720px; margin-inline:auto;
     line-height:1.55; -webkit-text-size-adjust:100%;
   }
-  header{margin-bottom:18px}
   h1{font-size:1.45rem; margin:0 0 6px; letter-spacing:-.3px; text-wrap:balance}
   .sub{color:var(--dim); font-size:.86rem; margin:0}
   .notice{
@@ -40,29 +39,39 @@
   }
   .notice b{color:var(--accent)}
   .notice ul{margin:8px 0 0; padding-left:18px}
-  .notice li{margin:3px 0}
+  .notice li{margin:4px 0}
   h2.group{
     font-size:.76rem; letter-spacing:1.6px; color:var(--dim);
     margin:30px 0 10px; font-weight:700;
   }
   .list{display:flex; flex-direction:column; gap:9px}
-  a.item{
-    display:flex; align-items:center; gap:12px; text-decoration:none;
+  .item{
+    display:flex; align-items:stretch; gap:8px;
     background:var(--panel); border:1px solid var(--line); border-radius:12px;
-    padding:13px 14px; color:inherit; box-shadow:var(--shadow);
+    box-shadow:var(--shadow); overflow:hidden;
     transition:border-color .15s, transform .12s;
   }
-  a.item:hover,a.item:focus-visible{border-color:var(--accent); transform:translateY(-1px)}
-  a.item:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+  .item:hover{border-color:var(--accent); transform:translateY(-1px)}
+  a.main{
+    flex:1 1 auto; display:flex; align-items:center; gap:12px;
+    text-decoration:none; color:inherit; padding:13px 6px 13px 14px; min-width:0;
+  }
+  a.ans{
+    flex:0 0 auto; display:flex; align-items:center; text-decoration:none;
+    background:var(--ans-soft); color:var(--ans); font-size:.8rem; font-weight:700;
+    padding:0 13px; border-left:1px solid var(--line); white-space:nowrap;
+  }
+  a.ans:hover{filter:brightness(.96)}
+  a:focus-visible{outline:2px solid var(--accent); outline-offset:-2px}
   .chip{
     flex:0 0 auto; min-width:52px; text-align:center;
     background:var(--accent-soft); color:var(--accent); border-radius:8px;
     font-size:.78rem; font-weight:700; padding:6px 7px;
     font-variant-numeric:tabular-nums;
   }
+  .txt{min-width:0}
   .txt strong{display:block; font-size:.97rem; font-weight:700; line-height:1.35}
   .txt span{display:block; color:var(--dim); font-size:.8rem; margin-top:2px}
-  .arrow{margin-left:auto; color:var(--dim); font-size:1rem}
   footer{margin-top:40px; text-align:center; color:var(--dim); font-size:.76rem}
   footer .url{
     display:inline-block; margin-top:6px; font-size:.78rem;
@@ -80,68 +89,88 @@
 <div class="notice">
   <b>이 주소 하나만 기억하면 돼.</b>
   <ul>
-    <li>여기서 원하는 차시를 눌러서 들어가면 된다.</li>
+    <li>제목을 누르면 <b>내가 수업 때 쓴 학습지</b>가 그대로 열린다. 쓴 답도 남아 있어.</li>
+    <li>오른쪽 <b>답 보기</b>는 빈칸에 정답이 채워진 채로 열려. <b>먼저 풀어 보고</b> 확인하는 데 쓰자.</li>
     <li>즐겨찾기(⭐)에 넣어 두면 다음에 바로 찾을 수 있어.</li>
-    <li>학습지에 쓴 답은 <b>그 기기에 저장</b>돼. 같은 기기로 다시 열면 그대로 있다.</li>
   </ul>
 </div>
 
 <h2 class="group">Ⅴ. 국민 경제와 국제 거래</h2>
 <div class="list">
-  <a class="item" href="https://zzobakg-boop.github.io/vault-rag/worksheets/5-1차시_국내총생산과경제생활_개념편.html">
-    <span class="chip">5-1</span>
-    <span class="txt"><strong>국내 총생산과 경제생활</strong><span>엄마가 해 준 밥은 0원, 배달 떡볶이는 15,000원?</span></span>
-    <span class="arrow" aria-hidden="true">›</span>
-  </a>
-  <a class="item" href="https://zzobakg-boop.github.io/vault-rag/worksheets/5-2차시_물가와실업_개념편.html">
-    <span class="chip">5-2·3</span>
-    <span class="txt"><strong>물가와 실업</strong><span>둘 다 좋은데, 왜 동시에 못 잡을까?</span></span>
-    <span class="arrow" aria-hidden="true">›</span>
-  </a>
-  <a class="item" href="https://zzobakg-boop.github.io/vault-rag/worksheets/5-4차시_국제거래와비교우위_개념편.html">
-    <span class="chip">5-4</span>
-    <span class="txt"><strong>국제 거래와 비교 우위</strong><span>옷도 만들 수 있는데 왜 중국에서 사 올까?</span></span>
-    <span class="arrow" aria-hidden="true">›</span>
-  </a>
-  <a class="item" href="https://zzobakg-boop.github.io/vault-rag/worksheets/5-5차시_환율의결정과영향_개념편.html">
-    <span class="chip">5-5</span>
-    <span class="txt"><strong>환율의 결정과 영향</strong><span>해외 직구할 때 '환율 오름' 뜨면 왜 비싸질까?</span></span>
-    <span class="arrow" aria-hidden="true">›</span>
-  </a>
+  <div class="item">
+    <a class="main" href="https://zzobakg-boop.github.io/vault-rag/worksheets/5-1차시_국내총생산과경제생활_개념편.html">
+      <span class="chip">5-1</span>
+      <span class="txt"><strong>국내 총생산과 경제생활</strong><span>엄마가 해 준 밥은 0원, 배달 떡볶이는 15,000원?</span></span>
+    </a>
+    <a class="ans" href="https://zzobakg-boop.github.io/vault-rag/worksheets/5-1차시_국내총생산과경제생활_개념편_복습용.html">답 보기</a>
+  </div>
+  <div class="item">
+    <a class="main" href="https://zzobakg-boop.github.io/vault-rag/worksheets/5-2차시_물가와실업_개념편.html">
+      <span class="chip">5-2·3</span>
+      <span class="txt"><strong>물가와 실업</strong><span>둘 다 좋은데, 왜 동시에 못 잡을까?</span></span>
+    </a>
+    <a class="ans" href="https://zzobakg-boop.github.io/vault-rag/worksheets/5-2차시_물가와실업_개념편_복습용.html">답 보기</a>
+  </div>
+  <div class="item">
+    <a class="main" href="https://zzobakg-boop.github.io/vault-rag/worksheets/5-4차시_국제거래와비교우위_개념편.html">
+      <span class="chip">5-4</span>
+      <span class="txt"><strong>국제 거래와 비교 우위</strong><span>옷도 만들 수 있는데 왜 중국에서 사 올까?</span></span>
+    </a>
+    <a class="ans" href="https://zzobakg-boop.github.io/vault-rag/worksheets/5-4차시_국제거래와비교우위_개념편_복습용.html">답 보기</a>
+  </div>
+  <div class="item">
+    <a class="main" href="https://zzobakg-boop.github.io/vault-rag/worksheets/5-5차시_환율의결정과영향_개념편.html">
+      <span class="chip">5-5</span>
+      <span class="txt"><strong>환율의 결정과 영향</strong><span>해외 직구할 때 '환율 오름' 뜨면 왜 비싸질까?</span></span>
+    </a>
+    <a class="ans" href="https://zzobakg-boop.github.io/vault-rag/worksheets/5-5차시_환율의결정과영향_개념편_복습용.html">답 보기</a>
+  </div>
 </div>
 
 <h2 class="group">Ⅵ. 국제 사회와 국제 정치</h2>
 <div class="list">
-  <a class="item" href="https://zzobakg-boop.github.io/vault-rag/worksheets/6-1차시_국제사회의의미와특성_개념편.html">
-    <span class="chip">6-1</span>
-    <span class="txt"><strong>국제 사회의 의미와 특성</strong><span>세계에는 경찰이 없는데 왜 세상은 안 무너질까?</span></span>
-    <span class="arrow" aria-hidden="true">›</span>
-  </a>
-  <a class="item" href="https://zzobakg-boop.github.io/vault-rag/worksheets/6-2차시_국제사회의행위주체_개념편.html">
-    <span class="chip">6-2</span>
-    <span class="txt"><strong>국제 사회의 행위 주체</strong><span>굶는 7억 9,500만 명, 이건 누가 해결하나?</span></span>
-    <span class="arrow" aria-hidden="true">›</span>
-  </a>
-  <a class="item" href="https://zzobakg-boop.github.io/vault-rag/worksheets/6-3차시_경쟁과갈등의양상_개념편.html">
-    <span class="chip">6-3</span>
-    <span class="txt"><strong>경쟁과 갈등의 양상</strong><span>경쟁은 나쁜 걸까?</span></span>
-    <span class="arrow" aria-hidden="true">›</span>
-  </a>
-  <a class="item" href="https://zzobakg-boop.github.io/vault-rag/worksheets/6-4차시_협력을위한노력_개념편.html">
-    <span class="chip">6-4</span>
-    <span class="txt"><strong>협력을 위한 노력</strong><span>탁구 시합 하나가 두 나라 사이를 바꿨다</span></span>
-    <span class="arrow" aria-hidden="true">›</span>
-  </a>
-  <a class="item" href="https://zzobakg-boop.github.io/vault-rag/worksheets/6-5차시_우리나라와주변국의갈등_개념편.html">
-    <span class="chip">6-5</span>
-    <span class="txt"><strong>우리나라와 주변국의 갈등</strong><span>국교는 정상화됐는데 왜 아직도 다툴까?</span></span>
-    <span class="arrow" aria-hidden="true">›</span>
-  </a>
-  <a class="item" href="https://zzobakg-boop.github.io/vault-rag/worksheets/6-6차시_갈등해결을위한노력_개념편.html">
-    <span class="chip">6-6</span>
-    <span class="txt"><strong>갈등 해결을 위한 노력</strong><span>6-1의 그 물음에 대한 답 — 지진 난 일본에 담요를 보낸 이유</span></span>
-    <span class="arrow" aria-hidden="true">›</span>
-  </a>
+  <div class="item">
+    <a class="main" href="https://zzobakg-boop.github.io/vault-rag/worksheets/6-1차시_국제사회의의미와특성_개념편.html">
+      <span class="chip">6-1</span>
+      <span class="txt"><strong>국제 사회의 의미와 특성</strong><span>세계에는 경찰이 없는데 왜 세상은 안 무너질까?</span></span>
+    </a>
+    <a class="ans" href="https://zzobakg-boop.github.io/vault-rag/worksheets/6-1차시_국제사회의의미와특성_개념편_복습용.html">답 보기</a>
+  </div>
+  <div class="item">
+    <a class="main" href="https://zzobakg-boop.github.io/vault-rag/worksheets/6-2차시_국제사회의행위주체_개념편.html">
+      <span class="chip">6-2</span>
+      <span class="txt"><strong>국제 사회의 행위 주체</strong><span>굶는 7억 9,500만 명, 이건 누가 해결하나?</span></span>
+    </a>
+    <a class="ans" href="https://zzobakg-boop.github.io/vault-rag/worksheets/6-2차시_국제사회의행위주체_개념편_복습용.html">답 보기</a>
+  </div>
+  <div class="item">
+    <a class="main" href="https://zzobakg-boop.github.io/vault-rag/worksheets/6-3차시_경쟁과갈등의양상_개념편.html">
+      <span class="chip">6-3</span>
+      <span class="txt"><strong>경쟁과 갈등의 양상</strong><span>경쟁은 나쁜 걸까?</span></span>
+    </a>
+    <a class="ans" href="https://zzobakg-boop.github.io/vault-rag/worksheets/6-3차시_경쟁과갈등의양상_개념편_복습용.html">답 보기</a>
+  </div>
+  <div class="item">
+    <a class="main" href="https://zzobakg-boop.github.io/vault-rag/worksheets/6-4차시_협력을위한노력_개념편.html">
+      <span class="chip">6-4</span>
+      <span class="txt"><strong>협력을 위한 노력</strong><span>탁구 시합 하나가 두 나라 사이를 바꿨다</span></span>
+    </a>
+    <a class="ans" href="https://zzobakg-boop.github.io/vault-rag/worksheets/6-4차시_협력을위한노력_개념편_복습용.html">답 보기</a>
+  </div>
+  <div class="item">
+    <a class="main" href="https://zzobakg-boop.github.io/vault-rag/worksheets/6-5차시_우리나라와주변국의갈등_개념편.html">
+      <span class="chip">6-5</span>
+      <span class="txt"><strong>우리나라와 주변국의 갈등</strong><span>국교는 정상화됐는데 왜 아직도 다툴까?</span></span>
+    </a>
+    <a class="ans" href="https://zzobakg-boop.github.io/vault-rag/worksheets/6-5차시_우리나라와주변국의갈등_개념편_복습용.html">답 보기</a>
+  </div>
+  <div class="item">
+    <a class="main" href="https://zzobakg-boop.github.io/vault-rag/worksheets/6-6차시_갈등해결을위한노력_개념편.html">
+      <span class="chip">6-6</span>
+      <span class="txt"><strong>갈등 해결을 위한 노력</strong><span>6-1의 그 물음에 대한 답 — 지진 난 일본에 담요를 보낸 이유</span></span>
+    </a>
+    <a class="ans" href="https://zzobakg-boop.github.io/vault-rag/worksheets/6-6차시_갈등해결을위한노력_개념편_복습용.html">답 보기</a>
+  </div>
 </div>
 
 <footer>
